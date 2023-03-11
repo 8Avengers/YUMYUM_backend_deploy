@@ -1,11 +1,14 @@
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Collection } from '../collection/entities/collection.entity';
 export declare class UserService {
     private readonly userRepository;
-    constructor(userRepository: Repository<User>);
+    private readonly collectionRepository;
+    constructor(userRepository: Repository<User>, collectionRepository: Repository<Collection>);
     findOne({ email }: {
         email: any;
     }): Promise<User>;
+    getUserById(id: any): Promise<User>;
     createUser({ email, hashedPassword, nickname, name, gender, birth, profileImage, phoneNumber, }: {
         email: any;
         hashedPassword: any;
@@ -34,5 +37,4 @@ export declare class UserService {
         nickname: any;
         name: any;
     } & User>;
-    getUserById(id: any): Promise<User>;
 }

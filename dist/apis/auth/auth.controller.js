@@ -24,6 +24,7 @@ const login_user_dto_1 = require("../user/dto/login-user.dto");
 const passport_1 = require("@nestjs/passport");
 const auth_guards_1 = require("./guards/auth.guards");
 const oauth_user_dto_1 = require("../user/dto/oauth-user.dto");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     constructor(userService, authService) {
         this.userService = userService;
@@ -53,10 +54,27 @@ let AuthController = class AuthController {
         return this.authService.loginOauth({ user });
     }
     async restoreAccessToken(currentUser) {
-        return this.authService.createAccessToken({ user: currentUser });
+        const accessToken = this.authService.createAccessToken({
+            user: currentUser,
+        });
+        return { accessToken };
     }
 };
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: '이메일로그인' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: '성공',
+        type: login_user_dto_1.LoginUserDto,
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 500,
+        description: 'Server Error',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: '요청이 올바르지 않아요',
+    }),
     (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)(common_3.ValidationPipe)),
     __param(1, (0, common_1.Req)()),
@@ -65,6 +83,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "loginEmail", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: '구글회원가입' }),
     (0, common_1.Get)('/signup/google'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
@@ -73,6 +92,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signupGoogle", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: '구글로그인' }),
     (0, common_1.Get)('/login/google'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
@@ -81,14 +101,22 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "loginGoogle", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: '액세스토큰만료시 재발행 ' }),
+    (0, swagger_1.ApiBearerAuth)('refreshToken'),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Access token successfully recovered',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Unauthorized' }),
     (0, common_1.UseGuards)(auth_guards_1.AuthRefreshGuard),
-    (0, common_1.Post)('/restoreAccessToken'),
+    (0, common_1.Post)('/restore-access-token'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "restoreAccessToken", null);
 AuthController = __decorate([
+    (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('/'),
     __metadata("design:paramtypes", [user_service_1.UserService,
         auth_service_1.AuthService])

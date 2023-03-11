@@ -6,6 +6,7 @@ export declare class Collection {
     name: string;
     description: string;
     image: string;
+    user_id: number;
     visibility: 'public' | 'private';
     createdAt: Date;
     updatedAt: Date;

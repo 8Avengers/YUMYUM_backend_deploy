@@ -10,10 +10,12 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_config_service_1 = require("./common/config/typeorm.config.service");
+const search_module_1 = require("./apis/search/search.module");
+const post_module_1 = require("./apis/post/post.module");
 const auth_module_1 = require("./apis/auth/auth.module");
 const user_module_1 = require("./apis/user/user.module");
-const typeorm_config_service_1 = require("./common/config/typeorm.config.service");
-const post_module_1 = require("./apis/post/post.module");
+const collection_module_1 = require("./apis/collection/collection.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -23,6 +25,8 @@ AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRootAsync({
                 useClass: typeorm_config_service_1.TypeOrmConfigService,
             }),
+            collection_module_1.CollectionModule,
+            search_module_1.SearchModule,
             post_module_1.PostModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,

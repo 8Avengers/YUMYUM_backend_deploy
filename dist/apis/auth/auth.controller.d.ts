@@ -18,5 +18,7 @@ export declare class AuthController {
         accessToken: string;
         refreshToken: string;
     }>;
-    restoreAccessToken(currentUser: any): Promise<string>;
+    restoreAccessToken(currentUser: any): Promise<{
+        accessToken: string;
+    }>;
 }

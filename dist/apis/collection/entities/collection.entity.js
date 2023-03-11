@@ -36,6 +36,10 @@ __decorate([
     __metadata("design:type", String)
 ], Collection.prototype, "image", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'int' }),
+    __metadata("design:type", Number)
+], Collection.prototype, "user_id", void 0);
+__decorate([
     (0, typeorm_1.Column)({
         type: 'enum',
         enum: ['public', 'private'],
@@ -56,7 +60,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Collection.prototype, "deletedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)((type) => collection_item_entity_1.CollectionItem, (collectionItem) => collectionItem.collection),
+    (0, typeorm_1.OneToMany)((type) => collection_item_entity_1.CollectionItem, (collectionItems) => collectionItems.collection),
     __metadata("design:type", Array)
 ], Collection.prototype, "collectionItems", void 0);
 __decorate([

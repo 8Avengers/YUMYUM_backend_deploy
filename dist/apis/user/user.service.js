@@ -18,14 +18,31 @@ const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
 const common_2 = require("@nestjs/common");
 const user_entity_1 = require("./entities/user.entity");
+const collection_entity_1 = require("../collection/entities/collection.entity");
 let UserService = class UserService {
-    constructor(userRepository) {
+    constructor(userRepository, collectionRepository) {
         this.userRepository = userRepository;
+        this.collectionRepository = collectionRepository;
     }
     async findOne({ email }) {
         return await this.userRepository.findOne({
             where: { email },
         });
+    }
+    async getUserById(id) {
+        try {
+            const user = await this.userRepository.findOne({
+                where: { id },
+            });
+            if (!user) {
+                throw new common_1.NotFoundException('User not found');
+            }
+            delete user.password;
+            return user;
+        }
+        catch (error) {
+            throw error;
+        }
     }
     async createUser({ email, hashedPassword, nickname, name, gender, birth, profileImage, phoneNumber, }) {
         try {
@@ -39,7 +56,7 @@ let UserService = class UserService {
             });
             if (nicknameExists)
                 throw new common_2.ConflictException('이미 사용중인 nickname입니다.');
-            return await this.userRepository.save({
+            const newUser = await this.userRepository.save({
                 email,
                 password: hashedPassword,
                 nickname,
@@ -49,6 +66,12 @@ let UserService = class UserService {
                 phone_number: phoneNumber,
                 profile_image: profileImage,
             });
+            const collection = new collection_entity_1.Collection();
+            collection.type = 'bookmark';
+            collection.visibility = 'private';
+            collection.user = newUser;
+            await this.collectionRepository.save(collection);
+            return newUser;
         }
         catch (error) {
             throw error;
@@ -66,26 +89,17 @@ let UserService = class UserService {
             });
             if (nicknameExists)
                 throw new common_2.ConflictException('이미 사용중인 nickname입니다.');
-            return await this.userRepository.save({
+            const newUser = await this.userRepository.save({
                 email,
                 nickname,
                 name,
             });
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    async getUserById(id) {
-        try {
-            const user = await this.userRepository.findOne({
-                where: { id },
-            });
-            if (!user) {
-                throw new common_1.NotFoundException('User not found');
-            }
-            delete user.password;
-            return user;
+            const collection = new collection_entity_1.Collection();
+            collection.type = 'bookmark';
+            collection.visibility = 'private';
+            collection.user = newUser;
+            await this.collectionRepository.save(collection);
+            return newUser;
         }
         catch (error) {
             throw error;
@@ -95,7 +109,9 @@ let UserService = class UserService {
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_1.Repository])
+    __param(1, (0, typeorm_2.InjectRepository)(collection_entity_1.Collection)),
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

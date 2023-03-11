@@ -10,15 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginUserDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class LoginUserDto {
 }
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'email@naver.com',
+        description: 'email',
+        required: true,
+    }),
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'email형식에 맞게 입력해주세요.' }),
     __metadata("design:type", String)
 ], LoginUserDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Abcd1234!',
+        description: 'password',
+        required: true,
+    }),
     (0, class_validator_1.MinLength)(8),
     (0, class_validator_1.MaxLength)(20),
     (0, class_validator_1.IsString)({ message: '비밀번호는 문자열 형식이여야 합니다' }),
