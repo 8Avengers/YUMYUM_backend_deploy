@@ -1,4 +1,4 @@
-import { User } from 'src/apis/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { CollectionItem } from './collection-item.entity';
 export declare class Collection {
     id: number;

@@ -12,13 +12,23 @@ const typeorm_1 = require("@nestjs/typeorm");
 const post_controller_1 = require("./post.controller");
 const post_service_1 = require("./post.service");
 const post_entity_1 = require("./entities/post.entity");
+const post_like_controller_1 = require("./post-like.controller");
+const post_like_service_1 = require("./post-like.service");
+const post_like_entity_1 = require("./entities/post-like.entity");
+const hashtag_entity_1 = require("./entities/hashtag.entity");
+const post_hashtag_service_1 = require("./post-hashtag.service");
+const collection_module_1 = require("../collection/collection.module");
 let PostModule = class PostModule {
 };
 PostModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([post_entity_1.Post])],
-        controllers: [post_controller_1.PostController],
-        providers: [post_service_1.PostService],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([post_entity_1.Post, post_like_entity_1.PostLike, hashtag_entity_1.Hashtag]),
+            collection_module_1.CollectionModule,
+        ],
+        controllers: [post_controller_1.PostController, post_like_controller_1.PostLikeController],
+        providers: [post_service_1.PostService, post_like_service_1.PostLikeService, post_hashtag_service_1.PostHashtagService],
+        exports: [post_service_1.PostService, typeorm_1.TypeOrmModule],
     })
 ], PostModule);
 exports.PostModule = PostModule;

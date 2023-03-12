@@ -9,14 +9,13 @@ export declare class UserService {
         email: any;
     }): Promise<User>;
     getUserById(id: any): Promise<User>;
-    createUser({ email, hashedPassword, nickname, name, gender, birth, profileImage, phoneNumber, }: {
+    createUser({ email, hashedPassword, nickname, name, gender, birth, phoneNumber, }: {
         email: any;
         hashedPassword: any;
         nickname: any;
         name: any;
         gender: any;
         birth: any;
-        profileImage: any;
         phoneNumber: any;
     }): Promise<{
         email: any;
@@ -26,7 +25,6 @@ export declare class UserService {
         gender: any;
         birth: any;
         phone_number: any;
-        profile_image: any;
     } & User>;
     createOauthUser({ email, nickname, name }: {
         email: any;

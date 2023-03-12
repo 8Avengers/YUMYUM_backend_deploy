@@ -110,15 +110,5 @@ __decorate([
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", Date)
 ], CreateUserDto.prototype, "birth", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'imageurl',
-        description: '회원가입과 동시에 디폴트이미지가 자동으로 DB에 저장됩니다.',
-        required: true,
-    }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "profileImage", void 0);
 exports.CreateUserDto = CreateUserDto;
 //# sourceMappingURL=create-user.dto.js.map

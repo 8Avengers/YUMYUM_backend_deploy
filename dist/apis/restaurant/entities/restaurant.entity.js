@@ -32,11 +32,11 @@ __decorate([
     __metadata("design:type", String)
 ], Restaurant.prototype, "category_group_name", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Restaurant.prototype, "phone_number", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Restaurant.prototype, "img_url", void 0);
 __decorate([

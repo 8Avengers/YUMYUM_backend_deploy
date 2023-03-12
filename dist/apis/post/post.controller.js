@@ -25,16 +25,15 @@ let PostController = class PostController {
         return await this.postService.getPostById(postId);
     }
     async getPosts() {
-        console.log('아무거나');
         const posts = await this.postService.getPosts();
-        console.log('**********', posts);
         return posts;
     }
-    createPost(restaurantId, data) {
-        return this.postService.createPost(restaurantId, data.content, data.rating, data.img);
+    createPost(data) {
+        const userId = 1;
+        this.postService.createPost(userId, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
     async updateArticle(postId, data) {
-        return this.postService.updatePost(postId, data.content, data.rating, data.img);
+        return this.postService.updatePost(postId, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
     async deletePost(postId) {
         return this.postService.deletePost(postId);
@@ -54,11 +53,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "getPosts", null);
 __decorate([
-    (0, common_1.Post)('/:restaurantId'),
-    __param(0, (0, common_1.Param)('restaurantId')),
-    __param(1, (0, common_1.Body)()),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "createPost", null);
 __decorate([

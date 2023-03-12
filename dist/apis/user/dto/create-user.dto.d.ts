@@ -7,5 +7,4 @@ export declare class CreateUserDto {
     readonly phoneNumber: string;
     gender: 'M' | 'F';
     birth: Date;
-    profileImage: string;
 }

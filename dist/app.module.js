@@ -13,6 +13,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_config_service_1 = require("./common/config/typeorm.config.service");
 const search_module_1 = require("./apis/search/search.module");
 const post_module_1 = require("./apis/post/post.module");
+const comment_module_1 = require("./apis/comment/comment.module");
 const auth_module_1 = require("./apis/auth/auth.module");
 const user_module_1 = require("./apis/user/user.module");
 const collection_module_1 = require("./apis/collection/collection.module");
@@ -28,6 +29,7 @@ AppModule = __decorate([
             collection_module_1.CollectionModule,
             search_module_1.SearchModule,
             post_module_1.PostModule,
+            comment_module_1.CommentModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
         ],

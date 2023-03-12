@@ -44,7 +44,7 @@ let UserService = class UserService {
             throw error;
         }
     }
-    async createUser({ email, hashedPassword, nickname, name, gender, birth, profileImage, phoneNumber, }) {
+    async createUser({ email, hashedPassword, nickname, name, gender, birth, phoneNumber, }) {
         try {
             const user = await this.userRepository.findOne({
                 where: { email },
@@ -64,7 +64,6 @@ let UserService = class UserService {
                 gender,
                 birth,
                 phone_number: phoneNumber,
-                profile_image: profileImage,
             });
             const collection = new collection_entity_1.Collection();
             collection.type = 'bookmark';

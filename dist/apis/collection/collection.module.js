@@ -9,8 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectionModule = void 0;
 const typeorm_1 = require("@nestjs/typeorm");
 const common_1 = require("@nestjs/common");
-const bookmark_controller_1 = require("../collection/bookmark.controller");
-const bookmark_service_1 = require("../collection/bookmark.service");
+const bookmark_controller_1 = require("./bookmark.controller");
+const bookmark_service_1 = require("./bookmark.service");
 const post_entity_1 = require("../post/entities/post.entity");
 const collection_entity_1 = require("../collection/entities/collection.entity");
 const collection_item_entity_1 = require("./entities/collection-item.entity");
@@ -23,6 +23,7 @@ CollectionModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([collection_entity_1.Collection, post_entity_1.Post, collection_item_entity_1.CollectionItem])],
         controllers: [bookmark_controller_1.BookmarkController, my_list_controller_1.MyListController],
         providers: [bookmark_service_1.BookmarkService, my_list_service_1.MyListService],
+        exports: [my_list_service_1.MyListService, typeorm_1.TypeOrmModule],
     })
 ], CollectionModule);
 exports.CollectionModule = CollectionModule;

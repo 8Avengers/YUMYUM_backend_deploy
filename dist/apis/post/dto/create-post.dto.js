@@ -14,6 +14,14 @@ const class_validator_1 = require("class-validator");
 class CreatePostDto {
 }
 __decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreatePostDto.prototype, "restaurantId", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreatePostDto.prototype, "myListId", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "content", void 0);
@@ -22,8 +30,14 @@ __decorate([
     __metadata("design:type", Number)
 ], CreatePostDto.prototype, "rating", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
     __metadata("design:type", String)
-], CreatePostDto.prototype, "img", void 0);
+], CreatePostDto.prototype, "image", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreatePostDto.prototype, "hashtagNames", void 0);
 exports.CreatePostDto = CreatePostDto;
 //# sourceMappingURL=create-post.dto.js.map

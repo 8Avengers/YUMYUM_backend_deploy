@@ -28,9 +28,7 @@ let JwtKakaoStrategy = class JwtKakaoStrategy extends (0, passport_1.PassportStr
         console.log('카카오 프로필찍어', profile);
         return {
             email: profile._json.kakao_account.email,
-            password: 'kakaoOauth!',
             name: profile.displayName,
-            age: 0,
         };
     }
 };

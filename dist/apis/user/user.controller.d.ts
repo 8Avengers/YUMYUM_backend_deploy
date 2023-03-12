@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    signUp(createUserDto: CreateUserDto): Promise<{
+    signUpEmail(createUserDto: CreateUserDto): Promise<{
         email: any;
         password: any;
         nickname: any;
@@ -12,7 +12,6 @@ export declare class UserController {
         gender: any;
         birth: any;
         phone_number: any;
-        profile_image: any;
     } & User>;
     me(user: User): Promise<User>;
     view(id: string): Promise<User>;

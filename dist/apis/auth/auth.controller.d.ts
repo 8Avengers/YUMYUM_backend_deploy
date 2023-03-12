@@ -18,6 +18,22 @@ export declare class AuthController {
         accessToken: string;
         refreshToken: string;
     }>;
+    signupNaver(user: OauthUserDto): Promise<{
+        accessToken: string;
+        refreshToken: string;
+    }>;
+    loginNaver(user: OauthUserDto): Promise<{
+        accessToken: string;
+        refreshToken: string;
+    }>;
+    signupKakao(user: OauthUserDto): Promise<{
+        accessToken: string;
+        refreshToken: string;
+    }>;
+    loginKakao(user: OauthUserDto): Promise<{
+        accessToken: string;
+        refreshToken: string;
+    }>;
     restoreAccessToken(currentUser: any): Promise<{
         accessToken: string;
     }>;
