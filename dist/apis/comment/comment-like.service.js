@@ -60,6 +60,29 @@ let CommentLikeService = class CommentLikeService {
             throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
         }
     }
+    async getLikedStatusforAllComments(commentIds, userId) {
+        try {
+            const commentLikes = await this.commentLikeRepository.find({
+                where: {
+                    comment: { id: (0, typeorm_2.In)(commentIds) },
+                    user: { id: userId },
+                },
+                relations: ['comment'],
+            });
+            const likedStatuses = commentIds.map((commentId) => {
+                const isLiked = commentLikes.some((like) => like.comment.id === commentId);
+                return {
+                    commentId,
+                    isLiked: isLiked ? 'True' : 'False',
+                };
+            });
+            return likedStatuses;
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
     async likeComment(commentId, userId) {
         try {
             const existComment = await this.commentRepository.findOne({

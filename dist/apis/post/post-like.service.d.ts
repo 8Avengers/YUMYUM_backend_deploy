@@ -10,6 +10,10 @@ export declare class PostLikeService {
         postId: number;
         totalLikes: number;
     }[]>;
+    getLikedStatusforOnePost(postId: number, userId: number): Promise<{
+        isLiked: string;
+    }>;
+    getLikedStatusforAllPosts(postIds: any, userId: any): Promise<any>;
     likePost(postId: any, userId: any): Promise<void>;
     unlikePost(postId: any, userId: any): Promise<void>;
 }

@@ -65,6 +65,12 @@ let AuthService = class AuthService {
         return {
             refreshToken,
             accessToken,
+            user: {
+                userId: user.id,
+                nickname: user.nickname,
+                email: user.email,
+                profileImage: user.profile_image,
+            },
         };
     }
     async loginOauth({ user }) {
@@ -94,6 +100,12 @@ let AuthService = class AuthService {
         return {
             refreshToken,
             accessToken,
+            user: {
+                userId: user.id,
+                nickname: user.nickname,
+                email: user.email,
+                profileImage: user.profile_image,
+            },
         };
     }
 };

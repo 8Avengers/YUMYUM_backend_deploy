@@ -36,10 +36,6 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)({ name: 'updated_at' }),
     __metadata("design:type", Date)
 ], Follow.prototype, "updated_at", void 0);
-__decorate([
-    (0, typeorm_1.DeleteDateColumn)({ name: 'deleted_at' }),
-    __metadata("design:type", Date)
-], Follow.prototype, "deleted_at", void 0);
 Follow = __decorate([
     (0, typeorm_1.Unique)('following_pair', ['follower', 'following']),
     (0, typeorm_1.Entity)()

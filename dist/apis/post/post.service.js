@@ -27,7 +27,7 @@ let PostService = class PostService {
         this.postHashtagService = postHashtagService;
         this.myListService = myListService;
     }
-    async getPosts() {
+    async getPosts(userId) {
         try {
             const posts = await this.postRepository.find({
                 where: { deleted_at: null, visibility: 'public' },
@@ -39,11 +39,14 @@ let PostService = class PostService {
             }
             const postIds = posts.map((post) => post.id);
             const postLikes = await this.likeService.getLikesForAllPosts(postIds);
+            const likedStatuses = await this.likeService.getLikedStatusforAllPosts(postIds, userId);
             return posts.map((post) => {
-                var _a;
+                var _a, _b;
                 const hashtags = post.hashtags.map((hashtag) => hashtag.name);
                 const likes = ((_a = postLikes.find((like) => like.postId === post.id)) === null || _a === void 0 ? void 0 : _a.totalLikes) || 0;
-                return Object.assign(Object.assign({}, post), { hashtags, totalLikes: likes });
+                const isLiked = ((_b = likedStatuses.find((status) => status.postId === post.id)) === null || _b === void 0 ? void 0 : _b.isLiked) ||
+                    'False';
+                return Object.assign(Object.assign({}, post), { hashtags, totalLikes: likes, isLiked });
             });
         }
         catch (err) {
@@ -56,7 +59,7 @@ let PostService = class PostService {
             }
         }
     }
-    async getPostById(id) {
+    async getPostById(id, userId) {
         try {
             const post = await this.postRepository.find({
                 where: { id, deleted_at: null, visibility: 'public' },
@@ -68,7 +71,8 @@ let PostService = class PostService {
             }
             const totalLikes = await this.likeService.getLikesForPost(id);
             const hashtags = post[0].hashtags.map(({ name }) => ({ name }));
-            return Object.assign(Object.assign({}, post[0]), { totalLikes, hashtags });
+            const { isLiked } = await this.likeService.getLikedStatusforOnePost(id, userId);
+            return Object.assign(Object.assign({}, post[0]), { totalLikes, hashtags, isLiked });
         }
         catch (err) {
             if (err instanceof common_1.NotFoundException) {
@@ -80,7 +84,7 @@ let PostService = class PostService {
             }
         }
     }
-    async createPost(userId, restaurantId, myListId, content, rating, img, visibility, hashtagNames) {
+    async createPost(userId, restaurantId, myListIds, content, rating, img, visibility, hashtagNames) {
         try {
             const post = await this.postRepository.create({
                 user: { id: userId },
@@ -94,7 +98,8 @@ let PostService = class PostService {
             post.hashtags = hashtags;
             await this.postRepository.save(post);
             const postId = post.id;
-            await this.myListService.myListPlusPosting(postId, myListId);
+            await this.myListService.myListPlusPosting(postId, myListIds);
+            return { postId: postId };
         }
         catch (err) {
             console.error(err);
@@ -119,6 +124,7 @@ let PostService = class PostService {
             await this.postRepository.save(post);
             const postId = post.id;
             await this.myListService.myListPlusPosting(postId, myListId);
+            return { postId: postId };
         }
         catch (err) {
             if (err instanceof common_1.NotFoundException) {

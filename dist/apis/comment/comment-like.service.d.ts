@@ -10,6 +10,7 @@ export declare class CommentLikeService {
         commentId: number;
         totalLikes: number;
     }[]>;
+    getLikedStatusforAllComments(commentIds: any, userId: any): Promise<any>;
     likeComment(commentId: any, userId: any): Promise<void>;
     unlikeComment(commentId: any, userId: any): Promise<void>;
 }

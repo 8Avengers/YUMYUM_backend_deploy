@@ -16,6 +16,7 @@ exports.MyListController = void 0;
 const common_1 = require("@nestjs/common");
 const decorators_1 = require("@nestjs/common/decorators");
 const swagger_1 = require("@nestjs/swagger");
+const create_collection_posting_dto_1 = require("./dto/create-collection-posting.dto");
 const create_my_list_dto_1 = require("./dto/create-my-list.dto");
 const update_my_list_dto_1 = require("./dto/update-my-list.dto");
 const my_list_service_1 = require("./my-list.service");
@@ -23,13 +24,14 @@ let MyListController = class MyListController {
     constructor(myListService) {
         this.myListService = myListService;
     }
-    async getMyLists(userId) {
+    async getMyLists() {
+        const userId = 1;
         const myLists = await this.myListService.getMyList(userId);
         return await myLists;
     }
-    createMyList(data) {
+    async createMyList(data) {
         const userId = 1;
-        return this.myListService.createMyList(userId, data.name, data.type);
+        return await this.myListService.createMyList(userId, data.name, data.type);
     }
     async updateMyList(collectionId, data) {
         const userId = 1;
@@ -38,39 +40,35 @@ let MyListController = class MyListController {
     async deleteMyList(collectionId) {
         return this.myListService.deleteMyList(collectionId);
     }
-    async myListPlusPosting(collectionId) {
+    async myListPlusPosting(data) {
         const postId = 1;
-        return this.myListService.myListPlusPosting(postId, collectionId);
+        return this.myListService.myListPlusPosting(postId, data.collectionId);
     }
 };
 __decorate([
-    (0, common_1.Get)('/:userId'),
-    (0, swagger_1.ApiOkResponse)({
-        description: 'MyList 전체조회(해당 유저의 맛집리스트만 불러오기)',
-    }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ description: '전체조회 실패' }),
-    __param(0, (0, decorators_1.Param)('userId')),
+    (0, common_1.Get)('/collections'),
+    (0, swagger_1.ApiOperation)({ summary: 'MyList 전체조회' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'MyList 전체조회 성공' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'MyList 전체조회 실패' }),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MyListController.prototype, "getMyLists", null);
 __decorate([
-    (0, common_1.Post)(),
-    (0, swagger_1.ApiCreatedResponse)({
-        description: 'MyList 생성완료(이름만 입력, 타입은 myList자동생성)',
-    }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ description: 'MyList 생성실패' }),
+    (0, common_1.Post)('/collections'),
+    (0, swagger_1.ApiOperation)({ summary: 'MyList 생성' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'MyList 생성 성공' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'MyList 생성 실패' }),
     __param(0, (0, decorators_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_my_list_dto_1.CreateMyListDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], MyListController.prototype, "createMyList", null);
 __decorate([
-    (0, common_1.Put)('/:collectionId'),
-    (0, swagger_1.ApiOkResponse)({
-        description: 'MyList 수정',
-    }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ description: 'MyList 수정실패' }),
+    (0, common_1.Put)('/collections/:collectionId'),
+    (0, swagger_1.ApiOperation)({ summary: 'MyList 수정' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'MyList 수정 성공' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'MyList 수정 실패' }),
     __param(0, (0, decorators_1.Param)('collectionId')),
     __param(1, (0, decorators_1.Body)()),
     __metadata("design:type", Function),
@@ -78,29 +76,27 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MyListController.prototype, "updateMyList", null);
 __decorate([
-    (0, common_1.Delete)('/:collectionId'),
-    (0, swagger_1.ApiOkResponse)({
-        description: 'MyList 삭제',
-    }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ description: 'MyList 삭제실패' }),
+    (0, common_1.Delete)('/collections/:collectionId'),
+    (0, swagger_1.ApiOperation)({ summary: 'MyList 삭제' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'MyList 삭제 성공' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'MyList 삭제 실패' }),
     __param(0, (0, decorators_1.Param)('collectionId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], MyListController.prototype, "deleteMyList", null);
 __decorate([
-    (0, common_1.Post)('/:collectionId'),
-    (0, swagger_1.ApiOkResponse)({
-        description: 'MyList 포스팅 추가',
-    }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ description: 'MyList 포스팅 추가 실패' }),
-    __param(0, (0, decorators_1.Param)('collectionId')),
+    (0, common_1.Post)('/collections/posting/'),
+    (0, swagger_1.ApiOperation)({ summary: 'MyList 포스팅 추가' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'MyList 포스팅 추가 성공' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'MyList 포스팅 추가 실패' }),
+    __param(0, (0, decorators_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [create_collection_posting_dto_1.CreateCollectionPostingDto]),
     __metadata("design:returntype", Promise)
 ], MyListController.prototype, "myListPlusPosting", null);
 MyListController = __decorate([
-    (0, common_1.Controller)('myList'),
+    (0, common_1.Controller)('my-list'),
     __metadata("design:paramtypes", [my_list_service_1.MyListService])
 ], MyListController);
 exports.MyListController = MyListController;

@@ -54,6 +54,44 @@ let PostLikeService = class PostLikeService {
             throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
         }
     }
+    async getLikedStatusforOnePost(postId, userId) {
+        try {
+            const postliked = await this.postLikeRepository.findOne({
+                where: { post: { id: postId }, user: { id: userId } },
+            });
+            console.log('postLiked', postliked);
+            return {
+                isLiked: postliked ? 'True' : 'False',
+            };
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    async getLikedStatusforAllPosts(postIds, userId) {
+        try {
+            const postLikes = await this.postLikeRepository.find({
+                where: {
+                    post: { id: (0, typeorm_2.In)(postIds) },
+                    user: { id: userId },
+                },
+                relations: ['post'],
+            });
+            const likedStatuses = postIds.map((postId) => {
+                const isLiked = postLikes.some((like) => like.post.id === postId);
+                return {
+                    postId,
+                    isLiked: isLiked ? 'True' : 'False',
+                };
+            });
+            return likedStatuses;
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
     async likePost(postId, userId) {
         try {
             const existingPost = await this.postRepository.findOne({

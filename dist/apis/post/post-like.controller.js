@@ -15,31 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostLikeController = void 0;
 const common_1 = require("@nestjs/common");
 const post_like_service_1 = require("./post-like.service");
+const auth_guards_1 = require("../auth/guards/auth.guards");
+const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 let PostLikeController = class PostLikeController {
     constructor(postLikeService) {
         this.postLikeService = postLikeService;
     }
-    async likePost(postId) {
-        const userId = 1;
-        await this.postLikeService.likePost(postId, userId);
+    async likePost(postId, currentUser) {
+        await this.postLikeService.likePost(postId, currentUser.id);
     }
-    async unlikePost(postId) {
-        const userId = 1;
-        await this.postLikeService.unlikePost(postId, userId);
+    async unlikePost(postId, currentUser) {
+        await this.postLikeService.unlikePost(postId, currentUser.id);
     }
 };
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], PostLikeController.prototype, "likePost", null);
 __decorate([
     (0, common_1.Delete)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], PostLikeController.prototype, "unlikePost", null);
 PostLikeController = __decorate([

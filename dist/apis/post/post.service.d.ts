@@ -9,9 +9,10 @@ export declare class PostService {
     private readonly postHashtagService;
     private readonly myListService;
     constructor(postRepository: Repository<Post>, likeService: PostLikeService, postHashtagService: PostHashtagService, myListService: MyListService);
-    getPosts(): Promise<{
+    getPosts(userId: number): Promise<{
         hashtags: string[];
         totalLikes: number;
+        isLiked: any;
         id: number;
         content: string;
         rating: number;
@@ -28,11 +29,12 @@ export declare class PostService {
         collectionItems: import("../collection/entities/collection-item.entity").CollectionItem[];
         postUserTags: import("./entities/post-usertag.entity").PostUserTag[];
     }[]>;
-    getPostById(id: number): Promise<{
+    getPostById(id: number, userId: number): Promise<{
         totalLikes: number;
         hashtags: {
             name: string;
         }[];
+        isLiked: string;
         id: number;
         content: string;
         rating: number;
@@ -49,7 +51,11 @@ export declare class PostService {
         collectionItems: import("../collection/entities/collection-item.entity").CollectionItem[];
         postUserTags: import("./entities/post-usertag.entity").PostUserTag[];
     }>;
-    createPost(userId: number, restaurantId: number, myListId: number, content: string, rating: number, img: string, visibility: any, hashtagNames: string[]): Promise<void>;
-    updatePost(id: number, restaurantId: number, myListId: number, content: string, rating: number, img: string, visibility: any, hashtagNames: string[]): Promise<void>;
+    createPost(userId: number, restaurantId: number, myListIds: number[], content: string, rating: number, img: string, visibility: any, hashtagNames: string[]): Promise<{
+        postId: number;
+    }>;
+    updatePost(id: number, restaurantId: number, myListId: number[], content: string, rating: number, img: string, visibility: any, hashtagNames: string[]): Promise<{
+        postId: number;
+    }>;
     deletePost(id: number): Promise<void>;
 }

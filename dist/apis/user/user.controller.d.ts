@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    signUpEmail(createUserDto: CreateUserDto): Promise<{
+    signUp(createUserDto: CreateUserDto): Promise<{
         email: any;
         password: any;
         nickname: any;
@@ -15,4 +15,8 @@ export declare class UserController {
     } & User>;
     me(user: User): Promise<User>;
     view(id: string): Promise<User>;
+    followUser(follower: User, followingId: number): Promise<User>;
+    unfollowUser(follower: User, followingId: number): Promise<User>;
+    getFollowersOfUser(userId: number): Promise<User[]>;
+    getFollowingsOfUser(userId: number): Promise<User[]>;
 }

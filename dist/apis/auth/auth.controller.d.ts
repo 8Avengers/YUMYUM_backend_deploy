@@ -6,9 +6,15 @@ export declare class AuthController {
     private readonly userService;
     private readonly authService;
     constructor(userService: UserService, authService: AuthService);
-    loginEmail(loginUserDto: LoginUserDto, req: any): Promise<{
+    loginEmail(loginUserDto: LoginUserDto): Promise<{
         refreshToken: string;
         accessToken: string;
+        user: {
+            userId: number;
+            nickname: string;
+            email: string;
+            profileImage: string;
+        };
     }>;
     signupGoogle(user: OauthUserDto): Promise<{
         accessToken: string;

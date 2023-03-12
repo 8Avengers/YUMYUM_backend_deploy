@@ -13,13 +13,14 @@ const user_entity_1 = require("./entities/user.entity");
 const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
 const collection_entity_1 = require("../collection/entities/collection.entity");
+const follow_entity_1 = require("./entities/follow.entity");
 const profile_controller_1 = require("./profile.controller");
 const profile_service_1 = require("./profile.service");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, collection_entity_1.Collection])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, collection_entity_1.Collection, follow_entity_1.Follow])],
         controllers: [user_controller_1.UserController, profile_controller_1.profileController],
         providers: [user_service_1.UserService, profile_service_1.ProfileService],
         exports: [user_service_1.UserService, typeorm_1.TypeOrmModule],

@@ -18,8 +18,9 @@ __decorate([
     __metadata("design:type", Number)
 ], CreatePostDto.prototype, "restaurantId", void 0);
 __decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsNumber)({}, { each: true }),
+    __metadata("design:type", Array)
 ], CreatePostDto.prototype, "myListId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),

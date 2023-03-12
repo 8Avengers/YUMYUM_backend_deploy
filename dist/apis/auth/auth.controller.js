@@ -31,7 +31,7 @@ let AuthController = class AuthController {
         this.userService = userService;
         this.authService = authService;
     }
-    async loginEmail(loginUserDto, req) {
+    async loginEmail(loginUserDto) {
         const { email, password } = loginUserDto;
         const user = await this.userService.findOne({ email });
         if (!user)
@@ -46,6 +46,12 @@ let AuthController = class AuthController {
         return {
             refreshToken,
             accessToken,
+            user: {
+                userId: user.id,
+                nickname: user.nickname,
+                email: user.email,
+                profileImage: user.profile_image,
+            },
         };
     }
     async signupGoogle(user) {
@@ -77,9 +83,8 @@ __decorate([
     (0, auth_decorators_1.loginEmail)(),
     (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)(common_3.ValidationPipe)),
-    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_user_dto_1.LoginUserDto, Object]),
+    __metadata("design:paramtypes", [login_user_dto_1.LoginUserDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "loginEmail", null);
 __decorate([

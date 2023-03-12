@@ -17,20 +17,21 @@ const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
+const auth_guards_1 = require("../auth/guards/auth.guards");
+const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
     }
-    async getPostById(postId) {
-        return await this.postService.getPostById(postId);
+    async getPostById(postId, currentUser) {
+        return await this.postService.getPostById(postId, currentUser.id);
     }
-    async getPosts() {
-        const posts = await this.postService.getPosts();
+    async getPosts(currentUser) {
+        const posts = await this.postService.getPosts(currentUser.id);
         return posts;
     }
-    createPost(data) {
-        const userId = 1;
-        this.postService.createPost(userId, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
+    createPost(data, currentUser) {
+        return this.postService.createPost(currentUser.id, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
     async updateArticle(postId, data) {
         return this.postService.updatePost(postId, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
@@ -41,26 +42,33 @@ let PostController = class PostController {
 };
 __decorate([
     (0, common_1.Get)('/:postId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "getPostById", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "getPosts", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "createPost", null);
 __decorate([
     (0, common_1.Put)('/:postId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -69,6 +77,7 @@ __decorate([
 ], PostController.prototype, "updateArticle", null);
 __decorate([
     (0, common_1.Delete)('/:postId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

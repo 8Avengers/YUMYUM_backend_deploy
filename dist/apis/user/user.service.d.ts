@@ -1,10 +1,12 @@
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Collection } from '../collection/entities/collection.entity';
+import { Follow } from './entities/follow.entity';
 export declare class UserService {
     private readonly userRepository;
+    private FollowRepository;
     private readonly collectionRepository;
-    constructor(userRepository: Repository<User>, collectionRepository: Repository<Collection>);
+    constructor(userRepository: Repository<User>, FollowRepository: Repository<Follow>, collectionRepository: Repository<Collection>);
     findOne({ email }: {
         email: any;
     }): Promise<User>;
@@ -35,4 +37,8 @@ export declare class UserService {
         nickname: any;
         name: any;
     } & User>;
+    createUserFollowRelation(follower: User, followingId: number): Promise<User>;
+    deleteUserFollowRelation(follower: User, followingId: number): Promise<User>;
+    getFollowers(userId: number): Promise<User[]>;
+    getFollowings(userId: number): Promise<User[]>;
 }

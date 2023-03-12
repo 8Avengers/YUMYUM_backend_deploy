@@ -17,6 +17,7 @@ const comment_module_1 = require("./apis/comment/comment.module");
 const auth_module_1 = require("./apis/auth/auth.module");
 const user_module_1 = require("./apis/user/user.module");
 const collection_module_1 = require("./apis/collection/collection.module");
+const restaurant_module_1 = require("./apis/restaurant/restaurant.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -32,6 +33,7 @@ AppModule = __decorate([
             comment_module_1.CommentModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
+            restaurant_module_1.RestaurantModule,
         ],
     })
 ], AppModule);

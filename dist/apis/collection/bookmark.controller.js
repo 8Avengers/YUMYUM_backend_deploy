@@ -118,7 +118,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "collectionMinusRestaurant", null);
 BookmarkController = __decorate([
-    (0, common_1.Controller)('bookmarks'),
+    (0, common_1.Controller)('bookmark'),
     __metadata("design:paramtypes", [bookmark_service_1.BookmarkService])
 ], BookmarkController);
 exports.BookmarkController = BookmarkController;

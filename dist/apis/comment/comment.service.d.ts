@@ -7,14 +7,15 @@ export declare class CommentService {
     private postRepository;
     private readonly commentLikeService;
     constructor(commentRepository: Repository<Comment>, postRepository: Repository<Post>, commentLikeService: CommentLikeService);
-    getAllComments(postId: number): Promise<{
-        user: string;
+    getAllComments(postId: number, userId: number): Promise<{
         totalLikes: number;
+        isLiked: any;
         id: number;
         content: string;
         created_at: Date;
         updated_at: Date;
         deleted_at: Date;
+        user: import("../user/entities/user.entity").User;
         post: Post;
         commentUserTags: import("./entities/comment-usertag.entity").CommentUserTag[];
         commentLikes: import("./entities/comment-like.entity").CommentLike[];

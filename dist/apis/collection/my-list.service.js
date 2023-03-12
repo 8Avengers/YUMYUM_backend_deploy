@@ -26,10 +26,18 @@ let MyListService = class MyListService {
     async getMyList(userId) {
         try {
             const myLists = await this.collectionRepository.find({
+                relations: {
+                    collectionItems: {
+                        post: true,
+                        restaurant: true,
+                    },
+                },
                 where: { user_id: userId, deletedAt: null, type: 'myList' },
                 select: { name: true, description: true, image: true },
             });
-            return myLists;
+            return [
+                myLists,
+            ];
         }
         catch (err) {
             console.error(err);
@@ -38,11 +46,12 @@ let MyListService = class MyListService {
     }
     async createMyList(userId, name, type) {
         try {
-            return this.collectionRepository.insert({
+            const myLists = await this.collectionRepository.insert({
                 user_id: userId,
                 name,
                 type: 'myList',
             });
+            return myLists;
         }
         catch (err) {
             console.error(err);
@@ -95,10 +104,13 @@ let MyListService = class MyListService {
     }
     async myListPlusPosting(postId, collectionId) {
         try {
-            await this.collectionItemRepository.insert({
-                post: { id: postId },
-                collection: { id: collectionId },
-            });
+            for (let i = 0; i < collectionId.length; i++) {
+                let item = collectionId[i];
+                await this.collectionItemRepository.insert({
+                    post: { id: postId },
+                    collection: { id: item },
+                });
+            }
         }
         catch (err) {
             if (err instanceof common_1.NotFoundException) {

@@ -17,16 +17,17 @@ const common_1 = require("@nestjs/common");
 const comment_service_1 = require("./comment.service");
 const create_comment_dto_1 = require("./dto/create-comment.dto");
 const update_comment_dto_1 = require("./dto/update-comment.dto");
+const auth_guards_1 = require("../auth/guards/auth.guards");
+const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 let CommentController = class CommentController {
     constructor(commentService) {
         this.commentService = commentService;
     }
-    async getAllComments(postId) {
-        return await this.commentService.getAllComments(postId);
+    async getAllComments(postId, currentUser) {
+        return await this.commentService.getAllComments(postId, currentUser.id);
     }
-    createComment(postId, data) {
-        const userId = 1;
-        return this.commentService.createComment(postId, userId, data.content);
+    createComment(postId, data, currentUser) {
+        return this.commentService.createComment(postId, currentUser.id, data.content);
     }
     async updateComment(postId, commentId, data) {
         return this.commentService.updateComment(postId, commentId, data.content);
@@ -37,21 +38,26 @@ let CommentController = class CommentController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], CommentController.prototype, "getAllComments", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, create_comment_dto_1.CreateCommentDto]),
+    __metadata("design:paramtypes", [Number, create_comment_dto_1.CreateCommentDto, Object]),
     __metadata("design:returntype", void 0)
 ], CommentController.prototype, "createComment", null);
 __decorate([
     (0, common_1.Put)(':commentId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __param(1, (0, common_1.Param)('commentId')),
     __param(2, (0, common_1.Body)()),
@@ -61,6 +67,7 @@ __decorate([
 ], CommentController.prototype, "updateComment", null);
 __decorate([
     (0, common_1.Delete)(':commentId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __param(1, (0, common_1.Param)('commentId')),
     __metadata("design:type", Function),

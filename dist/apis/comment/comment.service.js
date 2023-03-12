@@ -11,17 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentService = void 0;
 const common_1 = require("@nestjs/common");
@@ -36,7 +25,7 @@ let CommentService = class CommentService {
         this.postRepository = postRepository;
         this.commentLikeService = commentLikeService;
     }
-    async getAllComments(postId) {
+    async getAllComments(postId, userId) {
         try {
             const existPost = await this.postRepository.findOne({
                 where: { id: postId },
@@ -51,11 +40,12 @@ let CommentService = class CommentService {
             });
             const commentIds = comments.map((comment) => comment.id);
             const commentLikes = await this.commentLikeService.getLikesForAllComments(commentIds);
+            const likedStatuses = await this.commentLikeService.getLikedStatusforAllComments(commentIds, userId);
             return comments.map((comment) => {
-                var _a;
-                const { user: { nickname } } = comment, rest = __rest(comment, ["user"]);
+                var _a, _b;
                 const likes = ((_a = commentLikes.find((like) => like.commentId === comment.id)) === null || _a === void 0 ? void 0 : _a.totalLikes) || 0;
-                return Object.assign(Object.assign({}, comment), { user: nickname, totalLikes: likes });
+                const isLiked = ((_b = likedStatuses.find((status) => status.commentId === comment.id)) === null || _b === void 0 ? void 0 : _b.isLiked) || 'False';
+                return Object.assign(Object.assign({}, comment), { totalLikes: likes, isLiked });
             });
         }
         catch (err) {

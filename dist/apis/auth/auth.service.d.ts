@@ -17,11 +17,23 @@ export declare class AuthService {
     }): Promise<{
         refreshToken: string;
         accessToken: string;
+        user: {
+            userId: any;
+            nickname: any;
+            email: any;
+            profileImage: any;
+        };
     }>;
     loginOauth({ user }: {
         user: any;
     }): Promise<{
         refreshToken: string;
         accessToken: string;
+        user: {
+            userId: any;
+            nickname: any;
+            email: any;
+            profileImage: any;
+        };
     }>;
 }

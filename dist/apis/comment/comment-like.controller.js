@@ -15,31 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentLikeController = void 0;
 const common_1 = require("@nestjs/common");
 const comment_like_service_1 = require("./comment-like.service");
+const auth_guards_1 = require("../auth/guards/auth.guards");
+const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 let CommentLikeController = class CommentLikeController {
     constructor(commentLikeService) {
         this.commentLikeService = commentLikeService;
     }
-    async likeComment(commentId) {
-        const userId = 1;
-        return this.commentLikeService.likeComment(commentId, userId);
+    async likeComment(commentId, currentUser) {
+        return this.commentLikeService.likeComment(commentId, currentUser.id);
     }
-    async unlikeComment(commentId) {
-        const userId = 1;
-        return this.commentLikeService.unlikeComment(commentId, userId);
+    async unlikeComment(commentId, currentUser) {
+        return this.commentLikeService.unlikeComment(commentId, currentUser.id);
     }
 };
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('commentId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], CommentLikeController.prototype, "likeComment", null);
 __decorate([
     (0, common_1.Delete)(),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('commentId')),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], CommentLikeController.prototype, "unlikeComment", null);
 CommentLikeController = __decorate([

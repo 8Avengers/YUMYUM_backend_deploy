@@ -4,11 +4,12 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
-    getPostById(postId: number): Promise<{
+    getPostById(postId: number, currentUser: any): Promise<{
         totalLikes: number;
         hashtags: {
             name: string;
         }[];
+        isLiked: string;
         id: number;
         content: string;
         rating: number;
@@ -25,9 +26,10 @@ export declare class PostController {
         collectionItems: import("../collection/entities/collection-item.entity").CollectionItem[];
         postUserTags: import("./entities/post-usertag.entity").PostUserTag[];
     }>;
-    getPosts(): Promise<{
+    getPosts(currentUser: any): Promise<{
         hashtags: string[];
         totalLikes: number;
+        isLiked: any;
         id: number;
         content: string;
         rating: number;
@@ -44,7 +46,11 @@ export declare class PostController {
         collectionItems: import("../collection/entities/collection-item.entity").CollectionItem[];
         postUserTags: import("./entities/post-usertag.entity").PostUserTag[];
     }[]>;
-    createPost(data: CreatePostDto): void;
-    updateArticle(postId: number, data: UpdatePostDto): Promise<void>;
+    createPost(data: CreatePostDto, currentUser: any): Promise<{
+        postId: number;
+    }>;
+    updateArticle(postId: number, data: UpdatePostDto): Promise<{
+        postId: number;
+    }>;
     deletePost(postId: number): Promise<void>;
 }
