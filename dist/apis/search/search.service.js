@@ -34,7 +34,7 @@ let SearchService = class SearchService {
     }
     async getRestaurantSearch(keyword) {
         const restaurantSearchResult = await this.restaurantRepository.findBy({
-            name: (0, Like_1.Like)(`${keyword}%`),
+            place_name: (0, Like_1.Like)(`${keyword}%`),
         });
         return restaurantSearchResult;
     }

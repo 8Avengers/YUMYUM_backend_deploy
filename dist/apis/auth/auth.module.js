@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../user/entities/user.entity");
+const user_signup_service_1 = require("../user/user-signup.service");
 const user_module_1 = require("../user/user.module");
-const user_service_1 = require("../user/user.service");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const jwt_access_strategy_1 = require("./jwt-access.strategy");
@@ -35,8 +35,8 @@ AuthModule = __decorate([
             jwt_social_kakao_strategy_1.JwtKakaoStrategy,
             jwt_refresh_strategy_1.JwtRefreshStrategy,
             jwt_access_strategy_1.JwtAccessStrategy,
-            user_service_1.UserService,
             auth_service_1.AuthService,
+            user_signup_service_1.UserSignupService,
         ],
         controllers: [auth_controller_1.AuthController],
     })

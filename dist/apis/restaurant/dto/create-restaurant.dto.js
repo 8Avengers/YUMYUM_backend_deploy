@@ -16,22 +16,22 @@ class CreateRestaurantDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: '복자씨 연탄구이',
-        description: '가게 이름',
+        example: '제주특별자치도 서귀포시 성산읍 오조리 7-2',
+        description: '지번 주소',
         required: true,
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "name", void 0);
+], CreateRestaurantDto.prototype, "address_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: '음식점 > 한식 > 육류,고기',
-        description: '카테고리 이름(카카오)',
+        example: 'FD6',
+        description: '카테고리 코드(카카오)',
         required: true,
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "category_name", void 0);
+], CreateRestaurantDto.prototype, "category_group_code", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '음식점',
@@ -43,23 +43,13 @@ __decorate([
 ], CreateRestaurantDto.prototype, "category_group_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: "'064-782-7330' 이거나 빈값",
-        description: '가게 전화번호',
+        example: '음식점 > 한식 > 육류,고기',
+        description: '카테고리 이름(카카오)',
         required: true,
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "phone_number", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        type: 'string[]',
-        format: 'binary',
-        description: '이미지 파일 이름',
-        required: true,
-    }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "img_url", void 0);
+], CreateRestaurantDto.prototype, "category_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '1896620216',
@@ -71,31 +61,22 @@ __decorate([
 ], CreateRestaurantDto.prototype, "kakao_place_id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: '33.4685316070004',
-        description: '위도',
-        required: true,
-    }),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateRestaurantDto.prototype, "latitude", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '126.921242446619',
-        description: '경도',
-        required: true,
-    }),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateRestaurantDto.prototype, "longitude", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '제주특별자치도 서귀포시 성산읍 오조리 7-2',
-        description: '지번 주소',
+        example: "'064-782-7330' 이거나 빈값",
+        description: '가게 전화번호',
         required: true,
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "number_address", void 0);
+], CreateRestaurantDto.prototype, "phone", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '복자씨 연탄구이',
+        description: '가게 이름',
+        required: true,
+    }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateRestaurantDto.prototype, "place_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '제주특별자치도 서귀포시 성산읍 한도로 124',
@@ -104,6 +85,24 @@ __decorate([
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "road_address", void 0);
+], CreateRestaurantDto.prototype, "road_address_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '126.921242446619',
+        description: '경도',
+        required: true,
+    }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateRestaurantDto.prototype, "x", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '33.4685316070004',
+        description: '위도',
+        required: true,
+    }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateRestaurantDto.prototype, "y", void 0);
 exports.CreateRestaurantDto = CreateRestaurantDto;
 //# sourceMappingURL=create-restaurant.dto.js.map

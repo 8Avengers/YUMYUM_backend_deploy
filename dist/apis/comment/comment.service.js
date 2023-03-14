@@ -35,7 +35,7 @@ let CommentService = class CommentService {
             }
             const comments = await this.commentRepository.find({
                 where: { deleted_at: null, post: { id: postId } },
-                select: ['id', 'content'],
+                select: ['id', 'content', 'updated_at'],
                 relations: ['user'],
             });
             const commentIds = comments.map((comment) => comment.id);
@@ -43,9 +43,10 @@ let CommentService = class CommentService {
             const likedStatuses = await this.commentLikeService.getLikedStatusforAllComments(commentIds, userId);
             return comments.map((comment) => {
                 var _a, _b;
+                const { id, nickname, profile_image } = comment.user;
                 const likes = ((_a = commentLikes.find((like) => like.commentId === comment.id)) === null || _a === void 0 ? void 0 : _a.totalLikes) || 0;
                 const isLiked = ((_b = likedStatuses.find((status) => status.commentId === comment.id)) === null || _b === void 0 ? void 0 : _b.isLiked) || 'False';
-                return Object.assign(Object.assign({}, comment), { totalLikes: likes, isLiked });
+                return Object.assign(Object.assign({}, comment), { user: { id, nickname, profile_image }, totalLikes: likes, isLiked });
             });
         }
         catch (err) {

@@ -35,9 +35,7 @@ let MyListService = class MyListService {
                 where: { user_id: userId, deletedAt: null, type: 'myList' },
                 select: { name: true, description: true, image: true },
             });
-            return [
-                myLists,
-            ];
+            return myLists.map((collection) => (Object.assign(Object.assign({}, collection), { collectionItems: collection.collectionItems.slice(0, 3) })));
         }
         catch (err) {
             console.error(err);
@@ -110,6 +108,28 @@ let MyListService = class MyListService {
                     post: { id: postId },
                     collection: { id: item },
                 });
+            }
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
+    }
+    async myListMinusPosting(postId, collectionId) {
+        try {
+            if (collectionId) {
+                await this.collectionItemRepository.delete({
+                    collection: { id: collectionId },
+                    post: { id: postId },
+                });
+            }
+            else {
+                throw new common_1.NotFoundException('해당 컬렉션은 없습니다.');
             }
         }
         catch (err) {

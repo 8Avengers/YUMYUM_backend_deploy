@@ -18,6 +18,7 @@ const auth_module_1 = require("./apis/auth/auth.module");
 const user_module_1 = require("./apis/user/user.module");
 const collection_module_1 = require("./apis/collection/collection.module");
 const restaurant_module_1 = require("./apis/restaurant/restaurant.module");
+const upload_module_1 = require("./apis/upload/upload.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -30,10 +31,13 @@ AppModule = __decorate([
             collection_module_1.CollectionModule,
             search_module_1.SearchModule,
             post_module_1.PostModule,
+            user_module_1.UserModule,
+            auth_module_1.AuthModule,
             comment_module_1.CommentModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
             restaurant_module_1.RestaurantModule,
+            upload_module_1.UploadModule,
         ],
     })
 ], AppModule);

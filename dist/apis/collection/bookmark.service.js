@@ -16,57 +16,167 @@ exports.BookmarkService = void 0;
 const typeorm_1 = require("@nestjs/typeorm");
 const common_1 = require("@nestjs/common");
 const typeorm_2 = require("typeorm");
-const post_entity_1 = require("../post/entities/post.entity");
-const collection_item_entity_1 = require("./entities/collection-item.entity");
 const collection_entity_1 = require("./entities/collection.entity");
+const collection_item_entity_1 = require("./entities/collection-item.entity");
 let BookmarkService = class BookmarkService {
-    constructor(bookmarkRepository, collectionRepository, postRepository) {
-        this.bookmarkRepository = bookmarkRepository;
+    constructor(collectionRepository, collectionItemRepository) {
         this.collectionRepository = collectionRepository;
-        this.postRepository = postRepository;
+        this.collectionItemRepository = collectionItemRepository;
     }
-    async getBookmarks() {
-        return await this.bookmarkRepository.find({
-            where: { deletedAt: null },
+    async getBookmarks(userId) {
+        try {
+            const bookmarks = await this.collectionRepository.find({
+                relations: {
+                    collectionItems: {
+                        post: true,
+                        restaurant: true,
+                    },
+                },
+                where: { user_id: userId, deletedAt: null, type: 'bookmark' },
+                select: { name: true, image: true },
+            });
+            return bookmarks;
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    async getCollections(collectionId) {
+        try {
+            const bookmark = await this.collectionRepository.find({
+                relations: {
+                    collectionItems: {
+                        post: true,
+                        restaurant: true,
+                    },
+                },
+                where: { id: collectionId, deletedAt: null, type: 'bookmark' },
+            });
+            return bookmark;
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    createCollection(userId, name, type) {
+        return this.collectionRepository.insert({
+            user_id: userId,
+            name: name,
+            type: 'bookmark',
         });
     }
-    async getCollections(id) {
-        return await this.bookmarkRepository.find({
-            where: { id, deletedAt: null },
-        });
+    async updateCollection(collectionId, name) {
+        try {
+            const bookmarkUpdate = await this.collectionRepository.update({ id: collectionId }, {
+                name,
+            });
+            return bookmarkUpdate;
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
     }
-    createCollection(data) {
-        return this.bookmarkRepository.insert({
-            type: data.type,
-            name: data.name,
-            description: data.description,
-            visibility: data.visibility,
-        });
-    }
-    async updateCollection(id, name) {
-    }
-    async deleteCollection(id) {
-        return await this.bookmarkRepository.softDelete(id);
+    async deleteCollection(collectionId) {
+        try {
+            const result = await this.collectionRepository.softDelete(collectionId);
+            if (result.affected === 0) {
+                throw new common_1.NotFoundException('북마크가 없습니다.');
+            }
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
     }
     async collectionPlusPosting(collectionId, postId) {
-        const newBookmark = await this.postRepository.findOneBy({ id: postId });
-        const collection = await this.bookmarkRepository.findOneBy({
-            id: collectionId,
-        });
-        console.log('나는 콘솔', newBookmark, collection);
-        await this.bookmarkRepository.save(collection);
+        try {
+            await this.collectionItemRepository.insert({
+                collection: { id: collectionId },
+                post: { id: postId },
+            });
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
     }
-    async collectionPlusRestaurant(id, restaurantId) { }
-    collectionMinusPosting(id, postId) { }
-    collectionMinusRestaurant(id, restaurantId) { }
+    async collectionMinusPosting(collectionId, postId) {
+        try {
+            await this.collectionItemRepository.delete({
+                collection: { id: collectionId },
+                post: { id: postId },
+            });
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
+    }
+    async collectionPlusRestaurant(collectionId, restaurantId) {
+        try {
+            await this.collectionItemRepository.insert({
+                collection: { id: collectionId },
+                restaurant: { id: restaurantId },
+            });
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
+    }
+    async collectionMinusRestaurant(collectionId, restaurantId) {
+        try {
+            await this.collectionItemRepository.delete({
+                collection: { id: collectionId },
+                restaurant: { id: restaurantId },
+            });
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                console.error(err);
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
+        }
+    }
 };
 BookmarkService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(collection_entity_1.Collection)),
     __param(1, (0, typeorm_1.InjectRepository)(collection_item_entity_1.CollectionItem)),
-    __param(2, (0, typeorm_1.InjectRepository)(post_entity_1.Post)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
         typeorm_2.Repository])
 ], BookmarkService);
 exports.BookmarkService = BookmarkService;

@@ -27,6 +27,7 @@ let JwtAccessStrategy = class JwtAccessStrategy extends (0, passport_1.PassportS
         return {
             email: payload.email,
             id: payload.id,
+            nickname: payload.nickname,
             profileImage: payload.profileImage,
         };
     }

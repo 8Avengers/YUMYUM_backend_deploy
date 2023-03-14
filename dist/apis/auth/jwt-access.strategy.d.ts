@@ -7,6 +7,7 @@ export declare class JwtAccessStrategy extends JwtAccessStrategy_base {
     validate(payload: any): {
         email: any;
         id: any;
+        nickname: any;
         profileImage: any;
     };
 }

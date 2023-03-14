@@ -21,28 +21,77 @@ let RestaurantService = class RestaurantService {
     constructor(restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
-    async getRestaurant(id) {
+    async getRestaurant(kakao_place_id) {
         return await this.restaurantRepository.findBy({
-            kakao_place_id: id,
+            kakao_place_id: kakao_place_id,
         });
     }
-    createRestaurant(name, category_name, category_group_name, phone_number, img_url, kakao_place_id, latitude, longitude, number_address, road_address) {
+    async createRestaurant(address_name, category_group_code, category_group_name, category_name, kakao_place_id, phone, place_name, road_address_name, x, y) {
         try {
-            return this.restaurantRepository.insert({
-                name,
-                category_name,
+            const restaurant = await this.getRestaurant(kakao_place_id);
+            if (restaurant.length > 0) {
+                return restaurant[0].id;
+            }
+            const { identifiers } = await this.restaurantRepository.insert({
+                address_name,
+                category_group_code,
                 category_group_name,
-                phone_number,
-                img_url,
+                category_name,
                 kakao_place_id,
-                latitude,
-                longitude,
-                number_address,
-                road_address,
+                phone,
+                place_name,
+                road_address_name,
+                x,
+                y,
             });
+            return identifiers[0].id;
         }
         catch (err) {
             throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    async updateRestaurant(address_name, category_group_code, category_group_name, category_name, kakao_place_id, phone, place_name, road_address_name, x, y) {
+        const restaurant = await this.getRestaurant(kakao_place_id);
+        if (restaurant.length < 1) {
+            throw new common_1.NotFoundException('없는 가게 정보 입니다.');
+        }
+        return this.restaurantRepository.update({ kakao_place_id: kakao_place_id }, {
+            address_name,
+            category_group_code,
+            category_group_name,
+            category_name,
+            kakao_place_id,
+            phone,
+            place_name,
+            road_address_name,
+            x,
+            y,
+        });
+    }
+    catch(err) {
+        if (err instanceof common_1.NotFoundException) {
+            throw err;
+        }
+        else {
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    async deleteRestaurant(kakao_place_id) {
+        try {
+            const result = await this.restaurantRepository.softDelete({
+                kakao_place_id: kakao_place_id,
+            });
+            if (result.affected === 0) {
+                throw new common_1.NotFoundException(`Restaurant with kakao_place_id : ${kakao_place_id} not found.`);
+            }
+        }
+        catch (err) {
+            if (err instanceof common_1.NotFoundException) {
+                throw err;
+            }
+            else {
+                throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+            }
         }
     }
 };

@@ -22,7 +22,15 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Restaurant.prototype, "name", void 0);
+], Restaurant.prototype, "address_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Restaurant.prototype, "category_group_code", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Restaurant.prototype, "category_group_name", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -30,35 +38,27 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Restaurant.prototype, "category_group_name", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], Restaurant.prototype, "phone_number", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], Restaurant.prototype, "img_url", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
 ], Restaurant.prototype, "kakao_place_id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'double' }),
-    __metadata("design:type", Number)
-], Restaurant.prototype, "latitude", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'double' }),
-    __metadata("design:type", Number)
-], Restaurant.prototype, "longitude", void 0);
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Restaurant.prototype, "phone", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Restaurant.prototype, "number_address", void 0);
+], Restaurant.prototype, "place_name", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Restaurant.prototype, "road_address", void 0);
+], Restaurant.prototype, "road_address_name", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Restaurant.prototype, "x", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Restaurant.prototype, "y", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)

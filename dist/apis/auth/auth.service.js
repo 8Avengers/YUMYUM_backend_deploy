@@ -13,16 +13,21 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
-const user_service_1 = require("../user/user.service");
+const user_signup_service_1 = require("../user/user-signup.service");
 let AuthService = class AuthService {
-    constructor(jwtService, configService, userService) {
+    constructor(jwtService, configService, userSignupService) {
         this.jwtService = jwtService;
         this.configService = configService;
-        this.userService = userService;
+        this.userSignupService = userSignupService;
     }
     createAccessToken({ user }) {
         console.log('acessToken의 유저', user);
-        const accessToken = this.jwtService.sign({ email: user.email, id: user.id, profileImage: user.profile_image }, {
+        const accessToken = this.jwtService.sign({
+            email: user.email,
+            id: user.id,
+            nickname: user.nickname,
+            profileImage: user.profile_image,
+        }, {
             secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
             expiresIn: '14d',
         });
@@ -30,7 +35,9 @@ let AuthService = class AuthService {
     }
     createRefreshToken({ user }) {
         console.log('refreshToken의 유저', user);
-        const refreshToken = this.jwtService.sign({ email: user.email, id: user.id, profileImage: user.profile_image }, {
+        const refreshToken = this.jwtService.sign({
+            id: user.id,
+        }, {
             secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
             expiresIn: '14d',
         });
@@ -38,14 +45,14 @@ let AuthService = class AuthService {
     }
     async signupOauth({ user }) {
         console.log('oauth 끝나면 나오는 유저찍어보자', user);
-        let existingUser = await this.userService.findOne({
+        let existingUser = await this.userSignupService.findOne({
             email: user.email,
         });
         if (existingUser)
             throw new common_1.ConflictException('이미 등록된 이메일입니다. 소셜로그인해주세요.');
         try {
             if (!existingUser) {
-                user = await this.userService.createOauthUser({
+                user = await this.userSignupService.createOauthUser({
                     email: user.email,
                     nickname: user.nickname,
                     name: user.name,
@@ -76,11 +83,11 @@ let AuthService = class AuthService {
     async loginOauth({ user }) {
         console.log('oauth 끝나면 나오는 유저찍어보자', user);
         try {
-            let existingUser = await this.userService.findOne({
+            let existingUser = await this.userSignupService.findOne({
                 email: user.email,
             });
             if (!existingUser) {
-                user = await this.userService.createOauthUser({
+                user = await this.userSignupService.createOauthUser({
                     email: user.email,
                     nickname: user.nickname,
                     name: user.name,
@@ -113,7 +120,7 @@ AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         config_1.ConfigService,
-        user_service_1.UserService])
+        user_signup_service_1.UserSignupService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

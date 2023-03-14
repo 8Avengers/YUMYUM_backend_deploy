@@ -10,20 +10,22 @@ exports.UserModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./entities/user.entity");
-const user_controller_1 = require("./user.controller");
-const user_service_1 = require("./user.service");
+const user_profile_controller_1 = require("./user-profile.controller");
+const user_profile_service_1 = require("./user-profile.service");
 const collection_entity_1 = require("../collection/entities/collection.entity");
 const follow_entity_1 = require("./entities/follow.entity");
-const profile_controller_1 = require("./profile.controller");
-const profile_service_1 = require("./profile.service");
+const user_signup_controller_1 = require("./user-signup.controller");
+const user_signup_service_1 = require("./user-signup.service");
+const upload_module_1 = require("./../upload/upload.module");
+const upload_service_1 = require("../upload/upload.service");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, collection_entity_1.Collection, follow_entity_1.Follow])],
-        controllers: [user_controller_1.UserController, profile_controller_1.profileController],
-        providers: [user_service_1.UserService, profile_service_1.ProfileService],
-        exports: [user_service_1.UserService, typeorm_1.TypeOrmModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, collection_entity_1.Collection, follow_entity_1.Follow]), upload_module_1.UploadModule],
+        controllers: [user_profile_controller_1.UserProfileController, user_signup_controller_1.UserSignupController],
+        providers: [user_profile_service_1.UserProfileService, user_signup_service_1.UserSignupService, upload_service_1.UploadService],
+        exports: [user_profile_service_1.UserProfileService, user_signup_service_1.UserSignupService, typeorm_1.TypeOrmModule],
     })
 ], UserModule);
 exports.UserModule = UserModule;

@@ -1,11 +1,11 @@
 import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
+import { UserProfileService } from '../user/user-profile.service';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { OauthUserDto } from '../user/dto/oauth-user.dto';
 export declare class AuthController {
-    private readonly userService;
+    private readonly userProfileService;
     private readonly authService;
-    constructor(userService: UserService, authService: AuthService);
+    constructor(userProfileService: UserProfileService, authService: AuthService);
     loginEmail(loginUserDto: LoginUserDto): Promise<{
         refreshToken: string;
         accessToken: string;

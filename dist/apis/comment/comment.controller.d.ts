@@ -5,6 +5,11 @@ export declare class CommentController {
     private readonly commentService;
     constructor(commentService: CommentService);
     getAllComments(postId: number, currentUser: any): Promise<{
+        user: {
+            id: number;
+            nickname: string;
+            profile_image: string;
+        };
         totalLikes: number;
         isLiked: any;
         id: number;
@@ -12,7 +17,6 @@ export declare class CommentController {
         created_at: Date;
         updated_at: Date;
         deleted_at: Date;
-        user: import("../user/entities/user.entity").User;
         post: import("../post/entities/post.entity").Post;
         commentUserTags: import("./entities/comment-usertag.entity").CommentUserTag[];
         commentLikes: import("./entities/comment-like.entity").CommentLike[];

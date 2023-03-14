@@ -1,5 +1,4 @@
 export declare class CreatePostDto {
-    readonly restaurantId: number;
     readonly myListId: number[];
     readonly content: string;
     readonly rating: number;

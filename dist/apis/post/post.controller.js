@@ -16,7 +16,7 @@ exports.PostController = void 0;
 const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
-const update_post_dto_1 = require("./dto/update-post.dto");
+const create_restaurant_dto_1 = require("../restaurant/dto/create-restaurant.dto");
 const auth_guards_1 = require("../auth/guards/auth.guards");
 const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
 let PostController = class PostController {
@@ -30,11 +30,11 @@ let PostController = class PostController {
         const posts = await this.postService.getPosts(currentUser.id);
         return posts;
     }
-    createPost(data, currentUser) {
-        return this.postService.createPost(currentUser.id, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
+    createPost(data, restaurantData, currentUser) {
+        return this.postService.createPost(currentUser.id, restaurantData.address_name, restaurantData.category_group_code, restaurantData.category_group_name, restaurantData.category_name, restaurantData.kakao_place_id, restaurantData.phone, restaurantData.place_name, restaurantData.road_address_name, restaurantData.x, restaurantData.y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
-    async updateArticle(postId, data) {
-        return this.postService.updatePost(postId, data.restaurantId, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
+    async updateArticle(postId, data, restaurantData) {
+        return this.postService.updatePost(postId, restaurantData.address_name, restaurantData.category_group_code, restaurantData.category_group_name, restaurantData.category_name, restaurantData.kakao_place_id, restaurantData.phone, restaurantData.place_name, restaurantData.road_address_name, restaurantData.x, restaurantData.y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
     async deletePost(postId) {
         return this.postService.deletePost(postId);
@@ -61,18 +61,21 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto,
+        create_restaurant_dto_1.CreateRestaurantDto, Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "createPost", null);
 __decorate([
-    (0, common_1.Put)('/:postId'),
+    (0, common_1.Patch)('/:postId'),
     (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     __param(0, (0, common_1.Param)('postId')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_post_dto_1.UpdatePostDto]),
+    __metadata("design:paramtypes", [Number, Object, create_restaurant_dto_1.CreateRestaurantDto]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "updateArticle", null);
 __decorate([

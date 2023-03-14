@@ -19,6 +19,7 @@ RestaurantModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([restaurant_entity_1.Restaurant])],
         controllers: [restaurant_controller_1.RestaurantController],
         providers: [restaurant_service_1.RestaurantService],
+        exports: [restaurant_service_1.RestaurantService, typeorm_1.TypeOrmModule],
     })
 ], RestaurantModule);
 exports.RestaurantModule = RestaurantModule;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signUpEmail = void 0;
+exports.DeleteUser = exports.UpdateUserProfile = exports.signUpEmail = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const user_dto_1 = require("./dto/user.dto");
@@ -15,4 +15,12 @@ const signUpEmail = () => {
     }));
 };
 exports.signUpEmail = signUpEmail;
+const UpdateUserProfile = () => {
+    return (0, common_1.applyDecorators)((0, swagger_1.ApiOperation)({ summary: '유저 프로필 정보 수정' }), (0, swagger_1.ApiResponse)({ status: 200, description: '유저 프로필 정보 수정 성공' }), (0, swagger_1.ApiResponse)({ status: 400, description: '유저 프로필 정보 수정 실패' }));
+};
+exports.UpdateUserProfile = UpdateUserProfile;
+const DeleteUser = () => {
+    return (0, common_1.applyDecorators)((0, swagger_1.ApiOperation)({ summary: '유저 탈퇴 - 소프트딜리트' }), (0, swagger_1.ApiResponse)({ status: 200, description: '유저 탈퇴 - 소프트딜리트 성공' }), (0, swagger_1.ApiResponse)({ status: 400, description: '유저 탈퇴 - 소프트딜리트 실패' }));
+};
+exports.DeleteUser = DeleteUser;
 //# sourceMappingURL=user.decorators.js.map

@@ -1,11 +1,11 @@
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+import { UserSignupService } from '../user/user-signup.service';
 export declare class AuthService {
     private readonly jwtService;
     private readonly configService;
-    private readonly userService;
-    constructor(jwtService: JwtService, configService: ConfigService, userService: UserService);
+    private readonly userSignupService;
+    constructor(jwtService: JwtService, configService: ConfigService, userSignupService: UserSignupService);
     createAccessToken({ user }: {
         user: any;
     }): string;

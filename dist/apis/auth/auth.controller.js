@@ -19,7 +19,7 @@ const auth_service_1 = require("./auth.service");
 const bcrypt = require("bcrypt");
 const common_3 = require("@nestjs/common");
 const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
-const user_service_1 = require("../user/user.service");
+const user_profile_service_1 = require("../user/user-profile.service");
 const login_user_dto_1 = require("../user/dto/login-user.dto");
 const passport_1 = require("@nestjs/passport");
 const auth_guards_1 = require("./guards/auth.guards");
@@ -27,13 +27,13 @@ const oauth_user_dto_1 = require("../user/dto/oauth-user.dto");
 const auth_decorators_1 = require("./auth.decorators");
 const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
-    constructor(userService, authService) {
-        this.userService = userService;
+    constructor(userProfileService, authService) {
+        this.userProfileService = userProfileService;
         this.authService = authService;
     }
     async loginEmail(loginUserDto) {
         const { email, password } = loginUserDto;
-        const user = await this.userService.findOne({ email });
+        const user = await this.userProfileService.findByEmail({ email });
         if (!user)
             throw new common_2.UnprocessableEntityException(' 등록된 이메일이 없습니다.');
         const isAuth = await bcrypt.compare(password, user.password);
@@ -153,7 +153,7 @@ __decorate([
 AuthController = __decorate([
     (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('/'),
-    __metadata("design:paramtypes", [user_service_1.UserService,
+    __metadata("design:paramtypes", [user_profile_service_1.UserProfileService,
         auth_service_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
