@@ -5,9 +5,9 @@ import { CreateCollectionDto } from './dto/create-bookmark.dto';
 export declare class BookmarkController {
     private readonly bookmarkService;
     constructor(bookmarkService: BookmarkService);
-    getBookmarks(): Promise<import("./entities/collection.entity").Collection[]>;
+    getBookmarks(currentUser: any): Promise<import("./entities/collection.entity").Collection[]>;
     getCollections(collectionId: number): Promise<import("./entities/collection.entity").Collection[]>;
-    createCollection(data: CreateCollectionDto): Promise<import("typeorm").InsertResult>;
+    createCollection(data: CreateCollectionDto, currentUser: any): Promise<import("typeorm").InsertResult>;
     updateCollection(collectionId: number, name: string): Promise<import("typeorm").UpdateResult>;
     deleteCollection(collectionId: number): Promise<void>;
     collectionPlusPosting(postId: number, data: BookmarPostDto): Promise<void>;

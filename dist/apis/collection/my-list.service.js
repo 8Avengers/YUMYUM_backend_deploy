@@ -18,12 +18,33 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const Repository_1 = require("typeorm/repository/Repository");
 const collection_item_entity_1 = require("./entities/collection-item.entity");
+const post_entity_1 = require("../post/entities/post.entity");
 let MyListService = class MyListService {
-    constructor(collectionRepository, collectionItemRepository) {
+    constructor(collectionRepository, collectionItemRepository, postRepository) {
         this.collectionRepository = collectionRepository;
         this.collectionItemRepository = collectionItemRepository;
+        this.postRepository = postRepository;
     }
-    async getMyList(userId) {
+    async getMyListsMe(userId) {
+        try {
+            const myLists = await this.collectionRepository.find({
+                relations: {
+                    collectionItems: {
+                        post: true,
+                        restaurant: true,
+                    },
+                },
+                where: { user_id: userId, deletedAt: null, type: 'myList' },
+                select: { name: true, description: true, image: true },
+            });
+            return myLists.map((collection) => (Object.assign(Object.assign({}, collection), { collectionItems: collection.collectionItems.slice(0, 3) })));
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.InternalServerErrorException('Something went wrong while processing your request. Please try again later.');
+        }
+    }
+    async getMyListsAll(userId) {
         try {
             const myLists = await this.collectionRepository.find({
                 relations: {
@@ -83,7 +104,7 @@ let MyListService = class MyListService {
             }
         }
     }
-    async deleteMyList(id) {
+    async deleteMyList(userId, id) {
         try {
             const result = await this.collectionRepository.softDelete(id);
             if (result.affected === 0) {
@@ -103,11 +124,21 @@ let MyListService = class MyListService {
     async myListPlusPosting(postId, collectionId) {
         try {
             for (let i = 0; i < collectionId.length; i++) {
-                let item = collectionId[i];
-                await this.collectionItemRepository.insert({
+                const item = collectionId[i];
+                const existingItem = await this.collectionItemRepository.findOne({
+                    where: {
+                        post: { id: postId },
+                        collection: { id: item },
+                    },
+                });
+                if (existingItem) {
+                    continue;
+                }
+                const collectionItem = this.collectionItemRepository.create({
                     post: { id: postId },
                     collection: { id: item },
                 });
+                await this.collectionItemRepository.save(collectionItem);
             }
         }
         catch (err) {
@@ -147,7 +178,9 @@ MyListService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(collection_entity_1.Collection)),
     __param(1, (0, typeorm_1.InjectRepository)(collection_item_entity_1.CollectionItem)),
+    __param(2, (0, typeorm_1.InjectRepository)(post_entity_1.Post)),
     __metadata("design:paramtypes", [Repository_1.Repository,
+        Repository_1.Repository,
         Repository_1.Repository])
 ], MyListService);
 exports.MyListService = MyListService;

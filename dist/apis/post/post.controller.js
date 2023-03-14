@@ -30,11 +30,11 @@ let PostController = class PostController {
         const posts = await this.postService.getPosts(currentUser.id);
         return posts;
     }
-    createPost(data, restaurantData, currentUser) {
-        return this.postService.createPost(currentUser.id, restaurantData.address_name, restaurantData.category_group_code, restaurantData.category_group_name, restaurantData.category_name, restaurantData.kakao_place_id, restaurantData.phone, restaurantData.place_name, restaurantData.road_address_name, restaurantData.x, restaurantData.y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
+    createPost(data, { address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, }, currentUser) {
+        return this.postService.createPost(currentUser.id, address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
-    async updateArticle(postId, data, restaurantData) {
-        return this.postService.updatePost(postId, restaurantData.address_name, restaurantData.category_group_code, restaurantData.category_group_name, restaurantData.category_name, restaurantData.kakao_place_id, restaurantData.phone, restaurantData.place_name, restaurantData.road_address_name, restaurantData.x, restaurantData.y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
+    async updateArticle(postId, data, { address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, }) {
+        return this.postService.updatePost(postId, address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, data.myListId, data.content, data.rating, data.image, data.visibility, data.hashtagNames);
     }
     async deletePost(postId) {
         return this.postService.deletePost(postId);

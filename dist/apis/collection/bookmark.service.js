@@ -72,7 +72,7 @@ let BookmarkService = class BookmarkService {
     async updateCollection(collectionId, name) {
         try {
             const bookmarkUpdate = await this.collectionRepository.update({ id: collectionId }, {
-                name,
+                name: name,
             });
             return bookmarkUpdate;
         }
@@ -105,10 +105,20 @@ let BookmarkService = class BookmarkService {
     }
     async collectionPlusPosting(collectionId, postId) {
         try {
-            await this.collectionItemRepository.insert({
+            const existingItem = await this.collectionItemRepository.findOne({
+                where: {
+                    collection: { id: collectionId },
+                    post: { id: postId },
+                },
+            });
+            if (existingItem) {
+                return;
+            }
+            const collectionItem = this.collectionItemRepository.create({
                 collection: { id: collectionId },
                 post: { id: postId },
             });
+            await this.collectionItemRepository.save(collectionItem);
         }
         catch (err) {
             if (err instanceof common_1.NotFoundException) {
@@ -139,13 +149,23 @@ let BookmarkService = class BookmarkService {
     }
     async collectionPlusRestaurant(collectionId, restaurantId) {
         try {
+            const existingItem = await this.collectionItemRepository.findOne({
+                where: {
+                    collection: { id: collectionId },
+                    restaurant: { id: restaurantId },
+                },
+            });
+            console.log('북마크 레스토링', existingItem);
+            if (existingItem) {
+                return;
+            }
             await this.collectionItemRepository.insert({
                 collection: { id: collectionId },
                 restaurant: { id: restaurantId },
             });
         }
         catch (err) {
-            if (err instanceof common_1.NotFoundException) {
+            if (err instanceof common_1.HttpException) {
                 throw err;
             }
             else {

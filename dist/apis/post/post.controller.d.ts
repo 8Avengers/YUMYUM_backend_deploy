@@ -1,7 +1,7 @@
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { CreateRestaurantDto } from "../restaurant/dto/create-restaurant.dto";
+import { CreateRestaurantDto } from '../restaurant/dto/create-restaurant.dto';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
@@ -57,10 +57,10 @@ export declare class PostController {
         collectionItems: import("../collection/entities/collection-item.entity").CollectionItem[];
         postUserTags: import("./entities/post-usertag.entity").PostUserTag[];
     }[]>;
-    createPost(data: CreatePostDto, restaurantData: CreateRestaurantDto, currentUser: any): Promise<{
+    createPost(data: CreatePostDto, { address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, }: CreateRestaurantDto, currentUser: any): Promise<{
         postId: number;
     }>;
-    updateArticle(postId: number, data: Partial<UpdatePostDto>, restaurantData: CreateRestaurantDto): Promise<{
+    updateArticle(postId: number, data: Partial<UpdatePostDto>, { address_name, category_group_code, category_group_name, category_name, id, phone, place_name, road_address_name, x, y, }: CreateRestaurantDto): Promise<{
         postId: number;
     }>;
     deletePost(postId: number): Promise<void>;

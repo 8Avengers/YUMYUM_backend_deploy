@@ -58,7 +58,7 @@ __decorate([
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateRestaurantDto.prototype, "kakao_place_id", void 0);
+], CreateRestaurantDto.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: "'064-782-7330' 이거나 빈값",

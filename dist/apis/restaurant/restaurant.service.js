@@ -21,14 +21,14 @@ let RestaurantService = class RestaurantService {
     constructor(restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
-    async getRestaurant(kakao_place_id) {
+    async getRestaurantDetails(kakao_place_id) {
         return await this.restaurantRepository.findBy({
             kakao_place_id: kakao_place_id,
         });
     }
     async createRestaurant(address_name, category_group_code, category_group_name, category_name, kakao_place_id, phone, place_name, road_address_name, x, y) {
         try {
-            const restaurant = await this.getRestaurant(kakao_place_id);
+            const restaurant = await this.getRestaurantDetails(kakao_place_id);
             if (restaurant.length > 0) {
                 return restaurant[0].id;
             }
@@ -51,7 +51,7 @@ let RestaurantService = class RestaurantService {
         }
     }
     async updateRestaurant(address_name, category_group_code, category_group_name, category_name, kakao_place_id, phone, place_name, road_address_name, x, y) {
-        const restaurant = await this.getRestaurant(kakao_place_id);
+        const restaurant = await this.getRestaurantDetails(kakao_place_id);
         if (restaurant.length < 1) {
             throw new common_1.NotFoundException('없는 가게 정보 입니다.');
         }

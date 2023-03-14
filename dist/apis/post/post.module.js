@@ -21,12 +21,13 @@ const collection_module_1 = require("../collection/collection.module");
 const post_myfeed_controller_1 = require("./post-myfeed.controller");
 const comment_entity_1 = require("../comment/entities/comment.entity");
 const restaurant_module_1 = require("../restaurant/restaurant.module");
+const image_entity_1 = require("./entities/image.entity");
 let PostModule = class PostModule {
 };
 PostModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([post_entity_1.Post, post_like_entity_1.PostLike, hashtag_entity_1.Hashtag, comment_entity_1.Comment]),
+            typeorm_1.TypeOrmModule.forFeature([post_entity_1.Post, post_like_entity_1.PostLike, hashtag_entity_1.Hashtag, comment_entity_1.Comment, image_entity_1.Image]),
             collection_module_1.CollectionModule,
             restaurant_module_1.RestaurantModule,
         ],

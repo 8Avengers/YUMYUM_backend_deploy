@@ -23,21 +23,21 @@ let RestaurantController = class RestaurantController {
         this.restaurantService = restaurantService;
     }
     async getRestaurantDetails(kakao_place_id) {
-        const restaurantDetails = await this.restaurantService.getRestaurant(kakao_place_id);
+        const restaurantDetails = await this.restaurantService.getRestaurantDetails(kakao_place_id);
         return restaurantDetails;
     }
     async createRestaurant(data) {
-        return this.restaurantService.createRestaurant(data.address_name, data.category_group_code, data.category_group_name, data.category_name, data.kakao_place_id, data.phone, data.place_name, data.road_address_name, data.x, data.y);
+        return this.restaurantService.createRestaurant(data.address_name, data.category_group_code, data.category_group_name, data.category_name, data.id, data.phone, data.place_name, data.road_address_name, data.x, data.y);
     }
     async updateRestaurant(data) {
-        return this.restaurantService.updateRestaurant(data.address_name, data.category_group_code, data.category_group_name, data.category_name, data.kakao_place_id, data.phone, data.place_name, data.road_address_name, data.x, data.y);
+        return this.restaurantService.updateRestaurant(data.address_name, data.category_group_code, data.category_group_name, data.category_name, data.id, data.phone, data.place_name, data.road_address_name, data.x, data.y);
     }
     async deleteRestaurant(kakao_place_id) {
         return this.restaurantService.deleteRestaurant(kakao_place_id);
     }
 };
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: '가게 데이터 받기' }),
+    (0, swagger_1.ApiOperation)({ summary: '가게 상세 데이터 받기' }),
     (0, common_1.Get)('/:kakao_place_id'),
     __param(0, (0, common_1.Param)('kakao_place_id')),
     __metadata("design:type", Function),

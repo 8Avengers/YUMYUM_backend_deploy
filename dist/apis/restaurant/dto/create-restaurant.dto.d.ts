@@ -3,7 +3,7 @@ export declare class CreateRestaurantDto {
     readonly category_group_code: string;
     readonly category_group_name: string;
     readonly category_name: string;
-    readonly kakao_place_id: string;
+    readonly id: string;
     readonly phone: string;
     readonly place_name: string;
     readonly road_address_name: string;

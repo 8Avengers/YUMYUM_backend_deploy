@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookmarkController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const current_user_decorator_1 = require("../../common/decorators/current-user.decorator");
+const auth_guards_1 = require("../auth/guards/auth.guards");
 const bookmark_service_1 = require("./bookmark.service");
 const bookmark_post_dto_1 = require("./dto/bookmark-post.dto");
 const bookmark_restaurant_dto_1 = require("./dto/bookmark-restaurant.dto");
@@ -23,18 +25,16 @@ let BookmarkController = class BookmarkController {
     constructor(bookmarkService) {
         this.bookmarkService = bookmarkService;
     }
-    async getBookmarks() {
-        const userId = 2;
-        const bookmarks = await this.bookmarkService.getBookmarks(userId);
+    async getBookmarks(currentUser) {
+        const bookmarks = await this.bookmarkService.getBookmarks(currentUser.id);
         return await bookmarks;
     }
     async getCollections(collectionId) {
         const collections = await this.bookmarkService.getCollections(collectionId);
         return await collections;
     }
-    async createCollection(data) {
-        const userId = 2;
-        return await this.bookmarkService.createCollection(userId, data.name, data.type);
+    async createCollection(data, currentUser) {
+        return await this.bookmarkService.createCollection(currentUser.id, data.name, data.type);
     }
     async updateCollection(collectionId, name) {
         return await this.bookmarkService.updateCollection(collectionId, name);
@@ -57,15 +57,18 @@ let BookmarkController = class BookmarkController {
 };
 __decorate([
     (0, common_1.Get)('/collections'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 전체조회' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 전체조회 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 전체조회 실패' }),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "getBookmarks", null);
 __decorate([
     (0, common_1.Get)('/collections/:collectionId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 상세조회' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 상세조회 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 상세조회 실패' }),
@@ -76,27 +79,31 @@ __decorate([
 ], BookmarkController.prototype, "getCollections", null);
 __decorate([
     (0, common_1.Post)('/collections'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 컬렉션 생성' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 컬렉션 생성 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 컬렉션 생성 실패' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_bookmark_dto_1.CreateCollectionDto]),
+    __metadata("design:paramtypes", [create_bookmark_dto_1.CreateCollectionDto, Object]),
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "createCollection", null);
 __decorate([
     (0, common_1.Put)('/collections/:collectionId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 컬렉션 수정' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 컬렉션 수정 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 컬렉션 수정 실패' }),
     __param(0, (0, common_1.Param)('collectionId')),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)('name')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "updateCollection", null);
 __decorate([
     (0, common_1.Delete)('/collections/:collectionId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 컬렉션 삭제' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 컬렉션 삭제 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 컬렉션 삭제 실패' }),
@@ -106,7 +113,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "deleteCollection", null);
 __decorate([
-    (0, common_1.Post)('/collections/add/post/:postId'),
+    (0, common_1.Post)('/collections/plus/post/:postId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 포스팅 추가' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 포스팅 추가 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 포스팅 추가 실패' }),
@@ -118,6 +126,7 @@ __decorate([
 ], BookmarkController.prototype, "collectionPlusPosting", null);
 __decorate([
     (0, common_1.Delete)('/collections/minus/post/:postId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 포스팅 삭제' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 포스팅 삭제 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 포스팅 삭제 실패' }),
@@ -128,7 +137,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookmarkController.prototype, "collectionMinusPosting", null);
 __decorate([
-    (0, common_1.Post)('/collections/add/restaurant/:restaurantId'),
+    (0, common_1.Post)('/collections/plus/restaurant/:restaurantId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 맛집 추가' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 맛집 추가 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 맛집 추가 실패' }),
@@ -140,6 +150,7 @@ __decorate([
 ], BookmarkController.prototype, "collectionPlusRestaurant", null);
 __decorate([
     (0, common_1.Delete)('/collections/minus/restaurant/:restaurantId'),
+    (0, common_1.UseGuards)(auth_guards_1.AuthAccessGuard),
     (0, swagger_1.ApiOperation)({ summary: '북마크 맛집 삭제' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: '북마크 맛집 삭제 성공' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: '북마크 맛집 삭제 실패' }),

@@ -29,18 +29,21 @@ let SearchService = class SearchService {
     async getUserSearch(keyword) {
         const userSearchResult = await this.userRepository.findBy({
             nickname: (0, Like_1.Like)(`${keyword}%`),
+            deleted_at: null,
         });
         return userSearchResult;
     }
     async getRestaurantSearch(keyword) {
         const restaurantSearchResult = await this.restaurantRepository.findBy({
             place_name: (0, Like_1.Like)(`${keyword}%`),
+            deleted_at: null,
         });
         return restaurantSearchResult;
     }
     async getHashtagSearch(keyword) {
         const hashtagSearchResult = await this.hashtagRepository.findBy({
             name: (0, Like_1.Like)(`${keyword}%`),
+            deleted_at: null,
         });
         return hashtagSearchResult;
     }

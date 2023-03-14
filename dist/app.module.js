@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const map_module_1 = require("./apis/map/map.module");
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
@@ -38,6 +39,7 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             restaurant_module_1.RestaurantModule,
             upload_module_1.UploadModule,
+            map_module_1.MapModule,
         ],
     })
 ], AppModule);

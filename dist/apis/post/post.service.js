@@ -22,10 +22,12 @@ const post_hashtag_service_1 = require("./post-hashtag.service");
 const my_list_service_1 = require("../collection/my-list.service");
 const comment_entity_1 = require("../comment/entities/comment.entity");
 const restaurant_service_1 = require("../restaurant/restaurant.service");
+const image_entity_1 = require("./entities/image.entity");
 let PostService = class PostService {
-    constructor(postRepository, commentRepository, likeService, postHashtagService, myListService, restaurantService) {
+    constructor(postRepository, commentRepository, imageRepository, likeService, postHashtagService, myListService, restaurantService) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
+        this.imageRepository = imageRepository;
         this.likeService = likeService;
         this.postHashtagService = postHashtagService;
         this.myListService = myListService;
@@ -46,7 +48,10 @@ let PostService = class PostService {
             const likedStatuses = await this.likeService.getLikedStatusforAllPosts(postIds, userId);
             return posts.map((post) => {
                 var _a, _b;
-                const { id, nickname, profile_image } = post.user;
+                const user = post.user;
+                const id = (user === null || user === void 0 ? void 0 : user.id) || null;
+                const nickname = (user === null || user === void 0 ? void 0 : user.nickname) || null;
+                const profile_image = (user === null || user === void 0 ? void 0 : user.profile_image) || null;
                 const hashtags = post.hashtags.map((hashtag) => hashtag.name);
                 const likes = ((_a = postLikes.find((like) => like.postId === post.id)) === null || _a === void 0 ? void 0 : _a.totalLikes) || 0;
                 const isLiked = ((_b = likedStatuses.find((status) => status.postId === post.id)) === null || _b === void 0 ? void 0 : _b.isLiked) ||
@@ -107,13 +112,19 @@ let PostService = class PostService {
                 restaurant: { id: restaurantId },
                 content,
                 rating,
-                img_url: img,
                 visibility,
             });
             const hashtags = await this.postHashtagService.createOrUpdateHashtags(hashtagNames);
             post.hashtags = hashtags;
             await this.postRepository.save(post);
             const postId = post.id;
+            for (const imageUrl of img) {
+                const image = await this.imageRepository.create({
+                    post: { id: postId },
+                    file_name: imageUrl,
+                });
+                await this.imageRepository.save(image);
+            }
             await this.myListService.myListPlusPosting(postId, myListIds);
             return { postId: postId };
         }
@@ -124,7 +135,10 @@ let PostService = class PostService {
     }
     async updatePost(id, address_name, category_group_code, category_group_name, category_name, kakao_place_id, phone, place_name, road_address_name, x, y, myListId, content, rating, image, visibility, hashtagNames) {
         try {
-            const post = await this.postRepository.findOne({ where: { id }, relations: ['hashtags'] });
+            const post = await this.postRepository.findOne({
+                where: { id },
+                relations: ['hashtags'],
+            });
             if (!post) {
                 throw new common_1.NotFoundException(`존재하지 않는 포스트입니다.`);
             }
@@ -140,15 +154,27 @@ let PostService = class PostService {
             if (rating) {
                 updateData.rating = rating;
             }
-            if (image) {
-                updateData.img_url = image;
+            if (image && image.length > 0) {
+                const images = [];
+                for (const imageUrl of image) {
+                    const image = await this.imageRepository.create({
+                        file_name: imageUrl,
+                        post: { id },
+                    });
+                    images.push(image);
+                }
+                updateData.images = images;
             }
             if (visibility) {
                 updateData.visibility = visibility;
             }
             if (hashtagNames) {
-                const hashtags = await this.postHashtagService.createOrUpdateHashtags(hashtagNames);
-                updateData.hashtags = hashtags;
+                const existingHashtags = post.hashtags.map((hashtag) => hashtag.name);
+                const newHashtags = (await this.postHashtagService.createOrUpdateHashtags(hashtagNames)).map((hashtag) => hashtag.name);
+                if (existingHashtags.sort().join(',') !== newHashtags.sort().join(',')) {
+                    const hashtags = await this.postHashtagService.createOrUpdateHashtags(hashtagNames);
+                    updateData.hashtags = hashtags;
+                }
             }
             await this.postRepository.save(Object.assign(Object.assign({}, post), updateData), { reload: true });
             if (myListId) {
@@ -220,7 +246,9 @@ PostService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(post_entity_1.Post)),
     __param(1, (0, typeorm_1.InjectRepository)(comment_entity_1.Comment)),
+    __param(2, (0, typeorm_1.InjectRepository)(image_entity_1.Image)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         post_like_service_1.PostLikeService,
         post_hashtag_service_1.PostHashtagService,
